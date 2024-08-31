@@ -1,0 +1,14 @@
+{
+    "name": "FilmScreeningReservation",
+    "version": "1.0.0",
+    "description": "A simple film screening reservation system.",
+    "main": "FilmScreening.js",
+    "type": "module",
+    "scripts": {
+      "test": "node test.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+  }
+  

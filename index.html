@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Film Screening Reservation System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .film-list, .reservation-form, .revenue {
+            margin-bottom: 20px;
+        }
+        .film-list h2, .reservation-form h2, .revenue h2 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to the Film Screening Reservation System</h1>
+
+    <div class="film-list">
+        <h2>Available Films and Showtimes</h2>
+        <ul id="film-list"></ul>
+    </div>
+
+    <div class="reservation-form">
+        <h2>Reserve a Seat</h2>
+        <form id="reservation-form">
+            <label for="film-title">Film Title:</label>
+            <input type="text" id="film-title" name="film-title" required><br><br>
+
+            <label for="showtime">Showtime:</label>
+            <input type="text" id="showtime" name="showtime" required><br><br>
+
+            <label for="customer-name">Customer Name:</label>
+            <input type="text" id="customer-name" name="customer-name" required><br><br>
+
+            <button type="submit">Reserve Seat</button>
+        </form>
+    </div>
+
+    <div class="revenue">
+        <h2>Total Revenue</h2>
+        <p id="total-revenue">$0</p>
+    </div>
+
+    <script>
+        // JavaScript to manage the Film Screening Reservation System
+        class FilmScreening {
+            constructor() {
+                this.films = [
+                    { title: "Inception", showtimes: ["18:00", "21:00"], seatsAvailable: 50 },
+                    { title: "Interstellar", showtimes: ["17:00", "20:00"], seatsAvailable: 50 },
+                ];
+                this.reservations = [];
+                this.ticketPrice = 10; // Fixed ticket price
+            }
+
+            listFilms() {
+                const filmList = document.getElementById('film-list');
+                filmList.innerHTML = ''; // Clear existing list
+                this.films.forEach(film => {
+                    const li = document.createElement('li');
+                    li.textContent = `Title: ${film.title}, Showtimes: ${film.showtimes.join(", ")}, Seats Available: ${film.seatsAvailable}`;
+                    filmList.appendChild(li);
+                });
+            }
+
+            reserveSeat(filmTitle, showtime, customerName) {
+                const film = this.films.find(f => f.title === filmTitle && f.showtimes.includes(showtime));
+                if (film && film.seatsAvailable > 0) {
+                    film.seatsAvailable -= 1;
+                    const reservation = {
+                        filmTitle,
+                        showtime,
+                        seatNumber: 51 - film.seatsAvailable,
+                        customerName,
+                    };
+                    this.reservations.push(reservation);
+                    alert("Reservation successful!");
+                    this.listFilms();
+                    this.calculateTotalRevenue();
+                } else {
+                    alert("No seats available or invalid showtime.");
+                }
+            }
+
+            calculateTotalRevenue() {
+                const totalRevenue = this.reservations.reduce((sum, reservation) => {
+                    return sum + this.ticketPrice;
+                }, 0);
+                document.getElementById('total-revenue').textContent = `$${totalRevenue}`;
+            }
+        }
+
+        // Initialize the FilmScreening system
+        const screening = new FilmScreening();
+        screening.listFilms();
+
+        // Handle form submission for reserving a seat
+        document.getElementById('reservation-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const filmTitle = document.getElementById('film-title').value;
+            const showtime = document.getElementById('showtime').value;
+            const customerName = document.getElementById('customer-name').value;
+            screening.reserveSeat(filmTitle, showtime, customerName);
+        });
+    </script>
+
+</body>
+</html>
